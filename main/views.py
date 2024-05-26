@@ -64,6 +64,9 @@ class UserDetails(APIView):
     def put(self, request, format=None):
         serializer = self.put_serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if not request.data.get('id') or not request.data.get('card'):
+            return Response({"message": "Please Provide the ID and Card Image"},
+                            status=status.HTTP_400_BAD_REQUEST)
         user_id = request.data.get('id')
         user = main_models.UserDetails.objects.get(id=user_id)
         user.card = request.data.get('card')
